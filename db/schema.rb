@@ -10,12 +10,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_12_31_045252) do
+ActiveRecord::Schema.define(version: 2019_01_04_010328) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
   enable_extension "uuid-ossp"
+
+# Could not dump table "ability_scores" because of following StandardError
+#   Unknown type 'ability_name' for column 'ability'
 
   create_table "parties", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name"
@@ -31,11 +34,11 @@ ActiveRecord::Schema.define(version: 2018_12_31_045252) do
   end
 
   create_table "player_characters", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.string "name"
+    t.string "name", null: false
     t.string "hair"
     t.string "eyes"
     t.integer "age"
-    t.integer "level"
+    t.integer "level", default: 1, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.uuid "party_id"
@@ -51,6 +54,7 @@ ActiveRecord::Schema.define(version: 2018_12_31_045252) do
     t.index ["player_character_id"], name: "index_player_classes_on_player_character_id"
   end
 
+  add_foreign_key "ability_scores", "player_characters"
   add_foreign_key "player_characters", "parties"
   add_foreign_key "player_classes", "playable_classes"
   add_foreign_key "player_classes", "player_characters"
