@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_01_04_010328) do
+ActiveRecord::Schema.define(version: 2019_01_04_200239) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -42,7 +42,9 @@ ActiveRecord::Schema.define(version: 2019_01_04_010328) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.uuid "party_id"
+    t.uuid "race_id"
     t.index ["party_id"], name: "index_player_characters_on_party_id"
+    t.index ["race_id"], name: "index_player_characters_on_race_id"
   end
 
   create_table "player_classes", force: :cascade do |t|
@@ -54,8 +56,19 @@ ActiveRecord::Schema.define(version: 2019_01_04_010328) do
     t.index ["player_character_id"], name: "index_player_classes_on_player_character_id"
   end
 
+  create_table "races", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "type"
+    t.string "name"
+    t.uuid "parent_race_id"
+    t.text "description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   add_foreign_key "ability_scores", "player_characters"
   add_foreign_key "player_characters", "parties"
+  add_foreign_key "player_characters", "races"
   add_foreign_key "player_classes", "playable_classes"
   add_foreign_key "player_classes", "player_characters"
+  add_foreign_key "races", "races", column: "parent_race_id"
 end
