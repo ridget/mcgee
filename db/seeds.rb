@@ -2,6 +2,8 @@ elf = Race.create!(name: "Elf")
 human = Race.create!(name: "Human")
 
 wood_elf = SubRace.create!(name: "Wood Elf", parent_race: elf)
+
+wood_elf.ability_score_increases.create([{ability: "DEX", ability_score_bonus: 2}, {ability: "WIS", ability_score_bonus: 1}])
 party = Party.create!(name: 'The Returned')
 [:druid, :bard].each { |class_name| PlayableClass.create!(name: class_name) }
 [{name: "McGee", class: :druid, eyes: "copper", hair: "black", race: wood_elf}, {name: "Leonor", class: :bard, hair: "black", eyes: "brown", race: human}].each do |character|

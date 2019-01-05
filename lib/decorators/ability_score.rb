@@ -12,7 +12,7 @@ class Decorators::AbilityScore < SimpleDelegator
   end
 
   def racial_bonus
-    1
+    player_character.ability_score_increases.where(ability: ability).pluck(:ability_score_bonus).sum
   end
 
   def misc_bonus

@@ -10,12 +10,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_01_04_200239) do
+ActiveRecord::Schema.define(version: 2019_01_05_092423) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
   enable_extension "uuid-ossp"
+
+# Could not dump table "ability_score_increases" because of following StandardError
+#   Unknown type 'ability_name' for column 'ability'
 
 # Could not dump table "ability_scores" because of following StandardError
 #   Unknown type 'ability_name' for column 'ability'
@@ -65,6 +68,7 @@ ActiveRecord::Schema.define(version: 2019_01_04_200239) do
     t.datetime "updated_at", null: false
   end
 
+  add_foreign_key "ability_score_increases", "races"
   add_foreign_key "ability_scores", "player_characters"
   add_foreign_key "player_characters", "parties"
   add_foreign_key "player_characters", "races"
