@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_01_05_092423) do
+ActiveRecord::Schema.define(version: 2019_01_05_101945) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -23,6 +23,16 @@ ActiveRecord::Schema.define(version: 2019_01_05_092423) do
 # Could not dump table "ability_scores" because of following StandardError
 #   Unknown type 'ability_name' for column 'ability'
 
+# Could not dump table "feat_ability_score_increase_options" because of following StandardError
+#   Unknown type 'ability_name' for column 'ability'
+
+  create_table "feats", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "name"
+    t.text "description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "parties", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
@@ -34,6 +44,17 @@ ActiveRecord::Schema.define(version: 2019_01_05_092423) do
     t.text "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "player_character_feats", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "player_character_id", null: false
+    t.uuid "feat_id", null: false
+    t.uuid "feat_ability_score_increase_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["feat_ability_score_increase_id"], name: "index_player_character_feats_on_feat_ability_score_increase_id"
+    t.index ["feat_id"], name: "index_player_character_feats_on_feat_id"
+    t.index ["player_character_id"], name: "index_player_character_feats_on_player_character_id"
   end
 
   create_table "player_characters", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -52,7 +73,7 @@ ActiveRecord::Schema.define(version: 2019_01_05_092423) do
 
   create_table "player_classes", force: :cascade do |t|
     t.uuid "player_character_id"
-    t.uuid "playable_class_id"
+    t.uuid "playable_class_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["playable_class_id"], name: "index_player_classes_on_playable_class_id"
@@ -70,6 +91,10 @@ ActiveRecord::Schema.define(version: 2019_01_05_092423) do
 
   add_foreign_key "ability_score_increases", "races"
   add_foreign_key "ability_scores", "player_characters"
+  add_foreign_key "feat_ability_score_increase_options", "feats"
+  add_foreign_key "player_character_feats", "feat_ability_score_increase_options", column: "feat_ability_score_increase_id"
+  add_foreign_key "player_character_feats", "feats"
+  add_foreign_key "player_character_feats", "player_characters"
   add_foreign_key "player_characters", "parties"
   add_foreign_key "player_characters", "races"
   add_foreign_key "player_classes", "playable_classes"
