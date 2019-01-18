@@ -6,6 +6,7 @@ class Types::AbilityScore < GraphQL::Schema::Object
   field :modifier, Int, null: false
   field :racial_bonus, Int, null: false
   field :misc_bonus, Int, null: false
+  field :player_character, Types::PlayerCharacter, null: false
 
   def base_score
     object.score
@@ -31,9 +32,5 @@ class Types::AbilityScore < GraphQL::Schema::Object
 
   def ability_bonus(ability_score_increases)
     ability_score_increases.where(ability: ability).pluck(:ability_score_bonus).sum
-  end
-
-  def player_character
-    object.player_character
   end
 end

@@ -1,15 +1,9 @@
 class Types::Query < GraphQL::Schema::Object
-  field :player_character, Types::PlayerCharacter, null: false
-
-  def player_character
-    ::PlayerCharacter.find_by(name: "McGee")
+  field :player_character, Types::PlayerCharacter, null: false do
+    argument :name, String, required: true
   end
 
-  field :playable_classes, [Types::PlayableClass], null: false
-
-  def playable_classes
-    Types::PlayableClassName.values.keys.map.with_index do |class_name, index|
-      OpenStruct.new(id: index, name: class_name)
-    end
+  def player_character(name:)
+    ::PlayerCharacter.find_by(name: name)
   end
 end
