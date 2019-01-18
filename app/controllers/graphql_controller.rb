@@ -1,4 +1,7 @@
 class GraphqlController < ApplicationController
+  def index
+  end
+
   def execute
     variables = params[:variables]
     query = params[:query]

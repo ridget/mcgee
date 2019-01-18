@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_01_05_101945) do
+ActiveRecord::Schema.define(version: 2019_01_10_111414) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -57,6 +57,16 @@ ActiveRecord::Schema.define(version: 2019_01_05_101945) do
     t.index ["player_character_id"], name: "index_player_character_feats_on_player_character_id"
   end
 
+  create_table "player_character_spells", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "player_character_id", null: false
+    t.uuid "spell_id", null: false
+    t.boolean "prepared", default: false, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["player_character_id"], name: "index_player_character_spells_on_player_character_id"
+    t.index ["spell_id"], name: "index_player_character_spells_on_spell_id"
+  end
+
   create_table "player_characters", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name", null: false
     t.string "hair"
@@ -89,12 +99,21 @@ ActiveRecord::Schema.define(version: 2019_01_05_101945) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "spells", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "name"
+    t.text "description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   add_foreign_key "ability_score_increases", "races"
   add_foreign_key "ability_scores", "player_characters"
   add_foreign_key "feat_ability_score_increase_options", "feats"
   add_foreign_key "player_character_feats", "feat_ability_score_increase_options", column: "feat_ability_score_increase_id"
   add_foreign_key "player_character_feats", "feats"
   add_foreign_key "player_character_feats", "player_characters"
+  add_foreign_key "player_character_spells", "player_characters"
+  add_foreign_key "player_character_spells", "spells"
   add_foreign_key "player_characters", "parties"
   add_foreign_key "player_characters", "races"
   add_foreign_key "player_classes", "playable_classes"

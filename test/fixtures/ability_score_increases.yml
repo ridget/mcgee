@@ -1,0 +1,9 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  race: one
+  ability_score_bonus: 1
+
+two:
+  race: two
+  ability_score_bonus: 1

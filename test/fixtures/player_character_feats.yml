@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  player_character: one
+  feat: one
+  feat_ability_score_increase: one
+
+two:
+  player_character: two
+  feat: two
+  feat_ability_score_increase: two
